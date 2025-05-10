@@ -5,6 +5,11 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [firstColor, setFirstColor] = useState<string>('');
+  const [secondColor, setSecondColor] = useState<string>('');
+  const [tolerance, setTolerance] = useState<string>('');
+
+  
 
   return (
     <>
