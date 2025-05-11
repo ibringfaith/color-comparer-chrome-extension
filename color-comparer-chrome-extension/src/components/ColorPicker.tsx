@@ -3,7 +3,7 @@ import { rgbToHex, parseRgb, isValidHex, isValidRgb } from '../utils/colorUtils'
 
 interface ColorPickerProps {
   label: string;
-  onColorChange: (color: string) => void;
+  onColorChange: (color: string | undefined) => void;
   allowInput?: boolean;
   buttonText?: string;
 }
@@ -73,10 +73,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         const result = results[0].result;
         if (result === 'not-supported') {
           console.log('Not Supported. EyeDropper is not supported in this browser.');
-        } else if (result === 'cancelled') {
-          // User cancelled, do nothing
-        } else {
-          // Successfully got a color
+        } else if (result !== 'cancelled') {
           onColorChange(result);
         }
       });
