@@ -1,5 +1,7 @@
-import './App.css'
+import Index from "./pages/Index";
 
-const App = () => ();
+const App: React.FC = () => {
+  return <Index />;
+};
 
 export default App;
