@@ -50,3 +50,25 @@ export function calculateColorDifference(
 
   return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
 }
+
+// Get tolerance level based on color difference
+export function getToleranceLevel(difference: number): {
+  level: 'Identical' | 'Very Similar' | 'Similar' | 'Different' | 'Very Different';
+  percentage: number;
+} {
+  // Max difference in RGB space is the max euclidean distance sqrt(255^2 * 3) ≈ 441.67
+  const MAXDIFFERENCE = 441.67;
+  const percentSimilar = 100 - (difference / MAXDIFFERENCE) * 100;
+
+  if (difference <= 1) {
+    return { level: 'Identical', percentage: 100 };
+  } else if (difference <= 15) {
+    return { level: 'Very Similar', percentage: percentSimilar };
+  } else if (difference <= 50) {
+    return { level: 'Similar', percentage: percentSimilar };
+  } else if (difference <= 150) {
+    return { level: 'Different', percentage: percentSimilar };
+  } else {
+    return { level: 'Very Different', percentage: percentSimilar };
+  }
+}
