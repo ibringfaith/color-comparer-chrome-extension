@@ -82,3 +82,30 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       console.error('Error picking color:', error);
     }
   };
+
+  return (
+    <div className="space-y-2">
+      <label className="block text-sm font-medium">{label}</label>
+      <div className="flex space-x-2">
+        {allowInput && (
+          <input
+            type="text"
+            placeholder="#RRGGBB or rgb(r,g,b)"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            className="flex-1"
+          />
+        )}
+        <button 
+          onClick={handlePickColor}
+          className="shrink-0"
+        >
+          {buttonText}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default ColorPicker;
