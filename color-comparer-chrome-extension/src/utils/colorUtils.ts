@@ -18,3 +18,13 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
 
   return { r, g, b };
 }
+
+// Convert RGB to hex
+export function rgbToHex(r: number, g: number, b: number): string {
+  const toHex = (rgbVal: number) => {
+      const hex = rgbVal.toString(16);
+      return hex.length === 1 ? '0' + hex : hex;
+  };
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
