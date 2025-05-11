@@ -28,3 +28,15 @@ export function rgbToHex(r: number, g: number, b: number): string {
 
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
+
+// Parse RGB string to RGB object
+export function parseRgb(rgb: string): { r: number; g: number; b: number } | null {
+  const match = rgb.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+  if (!match) return null;
+
+  return {
+    r: parseInt(match[1], 10),
+    g: parseInt(match[2], 10),
+    b: parseInt(match[3], 10)
+  };
+}
