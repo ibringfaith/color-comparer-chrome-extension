@@ -72,3 +72,13 @@ export function getToleranceLevel(difference: number): {
     return { level: 'Very Different', percentage: percentSimilar };
   }
 }
+
+// Validate hex color
+export function isValidHex(hex: string): boolean {
+  return /^#?([0-9A-F]{3}){1,2}$/i.test(hex);
+}
+
+// Validate RGB color
+export function isValidRgb(rgb: string): boolean {
+  return /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/i.test(rgb);
+}
