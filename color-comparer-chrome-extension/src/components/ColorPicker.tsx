@@ -3,7 +3,7 @@ import { rgbToHex, parseRgb, isValidHex, isValidRgb } from '../utils/colorUtils'
 
 interface ColorPickerProps {
   label: string;
-  onColorChange: (color: string | undefined) => void;
+  onColorChange: (color: string) => void;
   allowInput?: boolean;
   buttonText?: string;
 }
@@ -50,13 +50,13 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         return;
       }
       
-      // Inject the eyedropper script
+      // eyedropper script
       await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {
-          return new Promise<string>((resolve) => {
+          return new Promise<string | undefined>((resolve) => {
             if (!('EyeDropper' in window)) {
-              resolve('not-supported');
+              resolve(undefined); // not-supported
               return;
             }
             
@@ -64,17 +64,18 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
             const eyeDropper = new window.EyeDropper();
             eyeDropper.open()
               .then((result: { sRGBHex: string }) => resolve(result.sRGBHex))
-              .catch(() => resolve('cancelled'));
+              .catch(() => resolve(undefined)); // cancelled
           });
         }
       }).then((results) => {
         if (!results || results.length === 0) return;
         
-        const result = results[0].result;
-        if (result === 'not-supported') {
-          console.log('Not Supported. EyeDropper is not supported in this browser.');
-        } else if (result !== 'cancelled') {
+        const result = results[0]?.result;
+        if (result) {
           onColorChange(result);
+        }
+        else {
+          console.log('Not Supported or Cancelled. EyeDropper is not supported in this browser or user cancelled selection.');
         }
       });
     } catch (error) {
