@@ -1,9 +1,7 @@
 // Convert hex to RGB
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-  // Remove # if present
   hex = hex.replace(/^#/, '');
 
-  // Convert 3-digit hex to 6-digit hex
   if (hex.length === 3) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
   }
@@ -39,4 +37,16 @@ export function parseRgb(rgb: string): { r: number; g: number; b: number } | nul
     g: parseInt(match[2], 10),
     b: parseInt(match[3], 10)
   };
+}
+
+// Calculate difference between two colors (Euclidean distance in RGB space)
+export function calculateColorDifference(
+  colorX: { r: number; g: number; b: number },
+  colorY: { r: number; g: number; b: number }
+): number {
+  const rDiff = colorX.r - colorY.r;
+  const gDiff = colorX.g - colorY.g;
+  const bDiff = colorX.b - colorY.b;
+
+  return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
 }
