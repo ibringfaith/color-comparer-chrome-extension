@@ -41,6 +41,22 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     }
   };
 
+  // eyedropper function
+  function pickColorFromPage(): Promise<string> {
+    return new Promise<string>((resolve) => {
+      if (!('EyeDropper' in window)) {
+        resolve('not-supported');
+        return;
+      }
+      
+      // @ts-ignore - EyeDropper API might not be recognized by TypeScript
+      const eyeDropper = new window.EyeDropper();
+      eyeDropper.open()
+        .then((result: { sRGBHex: string }) => resolve(result.sRGBHex))
+        .catch(() => resolve('cancelled'));
+    });
+  }
+
   const handlePickColor = async () => {
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -51,33 +67,19 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
       }
       
       // eyedropper script
-      await chrome.scripting.executeScript({
+      const results = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        func: () => {
-          return new Promise<string | undefined>((resolve) => {
-            if (!('EyeDropper' in window)) {
-              resolve(undefined); // not-supported
-              return;
-            }
-            
-            // @ts-ignore - TypeScript might not recognize EyeDropper API
-            const eyeDropper = new window.EyeDropper();
-            eyeDropper.open()
-              .then((result: { sRGBHex: string }) => resolve(result.sRGBHex))
-              .catch(() => resolve(undefined)); // cancelled
-          });
-        }
-      }).then((results) => {
-        if (!results || results.length === 0) return;
-        
-        const result = results[0]?.result;
-        if (result) {
-          onColorChange(result);
-        }
-        else {
-          console.log('Not Supported or Cancelled. EyeDropper is not supported in this browser or user cancelled selection.');
-        }
+        func: pickColorFromPage
       });
+      
+      if (!results || results.length === 0) return;
+      
+      const result = results[0].result as string;
+      if (result === 'not-supported') {
+        console.log('Not Supported. EyeDropper is not supported in this browser.');
+      } else if (result !== 'cancelled') {
+        onColorChange(result);
+      }
     } catch (error) {
       console.log('Error. Failed to pick color from page.');
       console.error('Error picking color:', error);
