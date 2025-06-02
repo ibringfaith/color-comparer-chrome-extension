@@ -42,7 +42,7 @@ const ToleranceDisplay: React.FC<ToleranceDisplayProps> = ({ color1, color2 }) =
           <span>{level}</span>
           <span>{Math.round(percentage)}% match</span>
         </div>
-        <meter value={percentage} className={`h-2 ${getToleranceColor()}`} />
+        <meter value={percentage} className={`h-2 ${getToleranceColor()}`} min="0" max="100"/>
       </div>
       
       <div className="text-xs text-gray-600">
