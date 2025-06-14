@@ -42,6 +42,7 @@ const ColorComparer: React.FC = () => {
       <ToleranceDisplay color1={color1} color2={color2} />
 
       <button 
+        style={{ backgroundColor: '#D5E3F0', color: 'black' }}
         onClick={handleClearColors}
         className="w-full"
       >

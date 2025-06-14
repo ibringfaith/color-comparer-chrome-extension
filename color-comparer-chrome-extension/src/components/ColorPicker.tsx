@@ -101,6 +101,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
           />
         )}
         <button 
+          style={{ backgroundColor: '#D5E3F0', color: 'black' }}
           onClick={handlePickColor}
           className="shrink-0"
         >
